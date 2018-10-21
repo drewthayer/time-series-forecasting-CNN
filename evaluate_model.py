@@ -1,5 +1,11 @@
 import pandas as pd
 import numpy as np
+import json
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import Flatten
+from keras.layers.convolutional import Conv1D
+from keras.layers.convolutional import MaxPooling1D
 
 from DataTools.pickle import save_to_pickle, load_from_pickle
 
@@ -15,7 +21,62 @@ if __name__=='__main__':
     test_data = test_df.values
 
     # TRANSFORM to CNN input shape
-    # 1D CNN imput shape: [n_samples, n_timesteps_per_sample, n_features]
+    # 1D CNN input shape: [n_samples, n_timesteps_per_sample, n_features]
     #                       e.g. [159 (week), 7(days), 1 (feature)] (or 8 features)
     train_data = train_data.reshape(int(train_data.shape[0]/7),7,train_data.shape[1])
     test_data = test_data.reshape(int(test_data.shape[0]/7),7,test_data.shape[1])
+
+    # flatten back
+    train_data_flat = train_data.reshape((train_data.shape[0]*train_data.shape[1], train_data.shape[2]))
+
+    # convert timeseries into staggered inputs and outputs
+    def build_staggered_Xy_1d(data, feature_idx, n_input=7, n_output=7):
+        ''' feature_idx:    int     index of feature in array '''
+        X, y = [],[]
+        in_start = 0
+        # step over timeseries: 'in' and 'out' series, lengths = n_input, n_output
+        # series are contiguous so in_end = out_start
+        for i in range(len(data)):
+            in_end = in_start + n_input
+            out_end = in_end + n_output
+            if out_end < len(data): # prevent iterating too far
+                x_input = data[in_start:in_end, feature_idx]
+                x_input = x_input.reshape((len(x_input), 1)) # column vector
+                X.append(x_input)
+                y.append(data[in_end:out_end, feature_idx])
+            # step forward one unit
+            in_start += 1
+
+        return np.array(X), np.array(y)
+
+    #X, y = build_staggered_Xy_1d(train_data_flat, n_input=7, n_output=7)
+
+    # train the model
+    def build_model(train_data, feature_idx, n_input=7, n_output=7):
+    	# prepare data
+    	X_train, y_train = build_staggered_Xy_1d(train_data, feature_idx, n_input, n_output)
+    	# define parameters
+    	verbose, epochs, batch_size = 0, 20, 4
+    	n_timesteps, n_features, n_outputs = X_train.shape[1], X_train.shape[2], y_train.shape[1]
+    	# define model
+    	model = Sequential()
+    	model.add(Conv1D(filters=16, kernel_size=3, activation='relu', input_shape=(n_timesteps,n_features)))
+    	model.add(MaxPooling1D(pool_size=2))
+    	model.add(Flatten())
+    	model.add(Dense(10, activation='relu'))
+    	model.add(Dense(n_outputs))
+    	model.compile(loss='mse', optimizer='adam')
+    	# fit network
+    	model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, verbose=verbose)
+    	return model
+
+    model = build_model(train_data_flat, 0, n_input=7, n_output=7)
+
+    # serialize and save model
+    model_json = model.to_json()
+    with open('models/model_1.json', 'w') as f:
+        json.dump(model_json, f)
+
+    # serialize weights to hdf5
+    model.save_weights('models/model_1.h5')
+    print('model and weights written to disk')
