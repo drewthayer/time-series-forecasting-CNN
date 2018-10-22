@@ -31,3 +31,10 @@ __downsample_data.py__
   - data in standard weeks (saturday to sunday) for easy interpretation
   - training set duration: 1113 days, 159.0 weeks
   - test set duration: 322 days, 46.0 weeks
+
+### time series forecast training data
+  - training features in sets of 7-day intervals
+  - training targets in sets of 7-day intervals, offset by 7 days (so X_train[7,:] = y_train[0,:], and so on...)
+
+### training output
+<img alt="rmse 1" src="/figures/output_1_rmse.png" width='300'>

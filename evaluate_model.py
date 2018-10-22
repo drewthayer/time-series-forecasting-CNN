@@ -33,7 +33,7 @@ if __name__=='__main__':
         # reshape into [1, n_input, 1]
         input_x = input_x.reshape((1, len(input_x), 1))
         # predict the next week
-        model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
+        model.compile(loss='mse', optimizer='adam')
         y_hat = model.predict(input_x, verbose=1)
         return y_hat
 
@@ -62,6 +62,8 @@ if __name__=='__main__':
         mse = mean_squared_error(y_true, y_hat)
         rmse = np.sqrt(mse)
         errors.append(rmse)
+
+    save_to_pickle((true, pred, errors), 'output', 'output_1.pkl')
 
 
 
