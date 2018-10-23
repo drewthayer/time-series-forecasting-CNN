@@ -54,7 +54,7 @@ __train_model.py__
   
 ### model performance
 __evaluate_model.py__
-preliminary result is highly variable:
+  - preliminary result is highly variable:
 
 <img alt="rmse 1" src="/figures/output_1_rmse.png" width='500'>
 
