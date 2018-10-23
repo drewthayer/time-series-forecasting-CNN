@@ -3,7 +3,7 @@ This is my work following a tutorial on using a convolutional neural net for tim
 
 tutorial: https://machinelearningmastery.com/how-to-develop-convolutional-neural-networks-for-multi-step-time-series-forecasting/
 
-Here, I follow the tutorial's examples and factor the logic into modules and functions, the way I would use it in production. 
+Here, I follow the tutorial's examples and factor the logic into modules and functions, the way I would use it in production.
 
 __Business problem:__
 Given some number of prior days of total daily power consumption, predict the next standard week of daily power consumption.
@@ -48,14 +48,17 @@ __train_test_split.py__
   - training features in sets of 7-day intervals
   - training targets in sets of 7-day intervals, offset by 7 days (so X_train[7,:] = y_train[0,:], and so on...)
 
-### training: univariate 
+### training: univariate
 __train_model.py__
   - training on 'global_active_power', the total power used by the house
-  
+
 ### model performance
 __evaluate_model.py__
-  - preliminary result is highly variable:
 
+preliminary result:
+<img alt="output 1" src="/figures/output_1_predictions.png" width='500'>
+
+rmse error:
 <img alt="rmse 1" src="/figures/output_1_rmse.png" width='500'>
 
 ### repository structure
@@ -73,5 +76,5 @@ __evaluate_model.py__
 ├── output                    output: (true, predicted, errors) (.pkl)
 ├── output.py                 analyze and plot output
 ├── train_model.py            train CNN
-└── train_test_split.py       split data into train and test sets based on date 
+└── train_test_split.py       split data into train and test sets based on date
 ~~~
