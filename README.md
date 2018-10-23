@@ -1,10 +1,14 @@
 # time-series-forecasting-CNN
-Tutorial: Using a convolutional neural net for time series forecasting.
+This is my work following a tutorial on using a convolutional neural net for time series forecasting. The tutorial provides a dataset and examples of engineering the data and implementing the modeling with Keras.
+
+tutorial: https://machinelearningmastery.com/how-to-develop-convolutional-neural-networks-for-multi-step-time-series-forecasting/
+
+Here, I follow the tutorial's examples and factor the logic into modules and functions, the way I would use it in production. 
 
 __Business problem:__
 Given some number of prior days of total daily power consumption, predict the next standard week of daily power consumption.
 
-__Data:__
+__Data:__ 'Household Power Consumption' dataset from UCI machine learning repository
   - household power consumption
   - units: kilowatts
   - frequency: daily
@@ -33,6 +37,7 @@ __downsample_data.py__
   - pandas offset aliases: http://pandas.pydata.org/pandas-docs/stable/timeseries.html#offset-aliases
 
 ### prepare training and validations sets
+__train_test_split.py__
   - train 2006:2009
   - validate 2010
   - data in standard weeks (saturday to sunday) for easy interpretation
@@ -43,7 +48,12 @@ __downsample_data.py__
   - training features in sets of 7-day intervals
   - training targets in sets of 7-day intervals, offset by 7 days (so X_train[7,:] = y_train[0,:], and so on...)
 
-### training output
+### training: univariate 
+__train_model.py__
+  - training on 'global_active_power', the total power used by the house
+  
+### model performance
+__evaluate_model.py__
 preliminary result is highly variable:
 
 <img alt="rmse 1" src="/figures/output_1_rmse.png" width='500'>
