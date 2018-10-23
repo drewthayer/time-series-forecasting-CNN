@@ -45,22 +45,23 @@ __downsample_data.py__
 
 ### training output
 preliminary result is highly variable:
-<img alt="rmse 1" src="/figures/output_1_rmse.png" width='300'>
+
+<img alt="rmse 1" src="/figures/output_1_rmse.png" width='500'>
 
 ### repository structure
 ~~~
 .
-├── DataTools              tools module: impute, pickle, resample
+├── DataTools                 tools module: impute, pickle, resample
 ├── README.md
-├── data                   data sets
-├── data_Xy                date in feature/target sets (.pkl)
-├── downsample_data.py
-├── evaluate_model.py
-├── figures
-├── load_and_clean_data.py
-├── models
-├── output
-├── output.py
-├── train_model.py
-└── train_test_split.py
+├── data                      data sets
+├── data_Xy                   data in feature/target sets (.pkl)
+├── downsample_data.py        downsample based on time interval
+├── evaluate_model.py         evaluate against test set
+├── figures                   figures
+├── load_and_clean_data.py    load dataset and clean
+├── models                    models (.json) and weights (.h5)
+├── output                    output: (true, predicted, errors) (.pkl)
+├── output.py                 analyze and plot output
+├── train_model.py            train CNN
+└── train_test_split.py       split data into train and test sets based on date 
 ~~~
