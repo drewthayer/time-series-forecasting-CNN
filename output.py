@@ -9,6 +9,6 @@ if __name__=='__main__':
 
     # plot errors
     plt.plot(errors)
-    plt.ylabel('RMSE')
+    plt.ylabel('RMSE [kW]')
     plt.title('prediction error: test period')
     plt.show()

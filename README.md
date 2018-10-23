@@ -1,18 +1,25 @@
 # time-series-forecasting-CNN
-Using a convolutional neural net for time series forecasting.
+Tutorial: Using a convolutional neural net for time series forecasting.
 
+__Business problem:__
 Given some number of prior days of total daily power consumption, predict the next standard week of daily power consumption.
 
-Data: kilowatts
+__Data:__
+  - household power consumption
   - units: kilowatts
+  - frequency: daily
   - time range: 2006 to 2010
 
-Forecast modeling:
-  - forecast will be days 1 to 7 into the future
+__strategy:__
+  - Time-sequence forecasting: autoregression
+      - be able to predict a forecast for y number of days into the future based on x number of days up to current (e.g. predict next week from this week)
+  - Convolutional Neural Network
+      - low-bias model that can learn non-linear relationships
+      - implemented in Keras
 
 Model evaluation:
   - evaluate each forecast day individually
-  - use RMSE so we can get an error metric in the data units (kilowatts)
+  - use RMSE, metric in the data units (kilowatts)
 
 ### prepare data  
 __load_and_clean_data.py__
@@ -37,4 +44,23 @@ __downsample_data.py__
   - training targets in sets of 7-day intervals, offset by 7 days (so X_train[7,:] = y_train[0,:], and so on...)
 
 ### training output
+preliminary result is highly variable:
 <img alt="rmse 1" src="/figures/output_1_rmse.png" width='300'>
+
+### repository structure
+~~~
+.
+├── DataTools              tools module: impute, pickle, resample
+├── README.md
+├── data                   data sets
+├── data_Xy                date in feature/target sets (.pkl)
+├── downsample_data.py
+├── evaluate_model.py
+├── figures
+├── load_and_clean_data.py
+├── models
+├── output
+├── output.py
+├── train_model.py
+└── train_test_split.py
+~~~
